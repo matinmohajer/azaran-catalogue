@@ -1,0 +1,1232 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>آذران نور — کاتالوگ محصولات</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #080810;
+      --bg2:     #0f0f1e;
+      --bg3:     #14142a;
+      --bg4:     #1a1a38;
+      --border:  #20203a;
+      --border2: #2a2a4a;
+      --gold:    #e8b84b;
+      --gold-dim: #b08830;
+      --gold-glow:  rgba(232,184,75,0.12);
+      --gold-glow2: rgba(232,184,75,0.06);
+      --text:    #eeeef8;
+      --text2:   #9090b8;
+      --green:   #52d68a;
+      --blue:    #5a9cf8;
+      --r:   8px;
+      --r2: 12px;
+      --sidebar: 290px;
+      --trans: 0.2s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Vazirmatn', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── HEADER ── */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(8,8,16,0.92);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px; height: 68px;
+      display: flex; align-items: center; gap: 20px;
+    }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0; }
+    .logo-icon {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dim));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .logo-text { font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .logo-sub  { font-size: 11px; font-weight: 400; color: var(--text2); }
+
+    .search-wrap { flex: 1; max-width: 520px; position: relative; }
+    .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: var(--text2); font-size: 16px; pointer-events: none; }
+    #searchInput {
+      width: 100%; height: 42px;
+      background: var(--bg3); border: 1px solid var(--border2); border-radius: 10px;
+      padding: 0 42px 0 14px; font-family: inherit; font-size: 14px; color: var(--text);
+      outline: none; transition: border-color var(--trans), box-shadow var(--trans); direction: rtl;
+    }
+    #searchInput::placeholder { color: var(--text2); }
+    #searchInput:focus { border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow); }
+
+    .header-actions { display: flex; align-items: center; gap: 10px; margin-right: auto; }
+    .btn-filter-toggle {
+      display: none; align-items: center; gap: 6px; padding: 8px 14px;
+      background: var(--bg3); border: 1px solid var(--border2); border-radius: var(--r);
+      color: var(--text); font-family: inherit; font-size: 13px; cursor: pointer; transition: all var(--trans);
+    }
+    .btn-filter-toggle:hover { border-color: var(--gold); color: var(--gold); }
+    #productCount { font-size: 12px; color: var(--text2); white-space: nowrap; flex-shrink: 0; }
+
+    /* ── LAYOUT ── */
+    .layout { display: flex; min-height: calc(100vh - 68px); }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar); flex-shrink: 0;
+      background: var(--bg2); border-left: 1px solid var(--border);
+      padding: 20px 16px;
+      position: sticky; top: 68px; height: calc(100vh - 68px);
+      overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+    .filter-section { margin-bottom: 22px; }
+    .filter-title {
+      font-size: 11px; font-weight: 600; color: var(--text2);
+      text-transform: uppercase; letter-spacing: 0.06em;
+      margin-bottom: 10px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
+    }
+    .filter-clear {
+      float: left; background: none; border: none; color: var(--gold);
+      font-family: inherit; font-size: 10px; cursor: pointer; padding: 0;
+      opacity: 0; transition: opacity var(--trans);
+    }
+    .filter-clear.visible { opacity: 1; }
+
+    .cat-list {
+      list-style: none; max-height: 240px; overflow-y: auto;
+      scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
+    }
+    .cat-list::-webkit-scrollbar { width: 3px; }
+    .cat-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+    .cat-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 5px 6px; border-radius: 6px; cursor: pointer; transition: background var(--trans);
+      font-size: 13px; gap: 6px;
+    }
+    .cat-item:hover { background: var(--bg3); }
+    .cat-item.active { background: var(--gold-glow); color: var(--gold); }
+    .cat-item .cat-name { flex: 1; }
+    .cat-count {
+      font-size: 10px; color: var(--text2); background: var(--bg3); padding: 1px 5px; border-radius: 8px;
+    }
+    .cat-item.active .cat-count { background: var(--gold-glow2); }
+
+    .color-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px; border-radius: 20px; font-size: 12px;
+      background: var(--bg3); border: 1px solid var(--border2);
+      cursor: pointer; transition: all var(--trans); white-space: nowrap;
+    }
+    .chip:hover { border-color: var(--gold); color: var(--gold); }
+    .chip.active { background: var(--gold-glow); border-color: var(--gold); color: var(--gold); }
+    .chip-color-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15); flex-shrink: 0;
+    }
+
+    .price-inputs { display: flex; gap: 6px; align-items: center; }
+    .price-input {
+      flex: 1; height: 34px; background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: var(--r); padding: 0 8px; font-family: inherit; font-size: 12px;
+      color: var(--text); outline: none; transition: border-color var(--trans);
+      direction: ltr; text-align: center;
+    }
+    .price-input:focus { border-color: var(--gold); }
+    .price-sep { color: var(--text2); font-size: 12px; }
+
+    .btn-reset-all {
+      width: 100%; padding: 9px; background: transparent; border: 1px solid var(--border2);
+      border-radius: var(--r); color: var(--text2); font-family: inherit; font-size: 13px;
+      cursor: pointer; transition: all var(--trans); margin-top: 8px;
+    }
+    .btn-reset-all:hover { border-color: var(--gold); color: var(--gold); }
+
+    /* ── MAIN ── */
+    main { flex: 1; padding: 24px; min-width: 0; }
+
+    .results-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px; flex-wrap: wrap; gap: 10px;
+    }
+    .results-text { font-size: 13px; color: var(--text2); }
+    .results-text strong { color: var(--text); }
+
+    .sort-select {
+      height: 32px; background: var(--bg3); border: 1px solid var(--border2);
+      border-radius: var(--r); padding: 0 10px; font-family: inherit; font-size: 12px;
+      color: var(--text2); outline: none; cursor: pointer;
+    }
+    .sort-select:focus { border-color: var(--gold); }
+
+    /* ── PRODUCT GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+    }
+
+    /* ── CARD ── */
+    .card {
+      background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--r2); padding: 0;
+      cursor: pointer; transition: all var(--trans);
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
+    }
+    .card::before {
+      content: ''; position: absolute; inset: 0; opacity: 0;
+      background: radial-gradient(ellipse at 60% 0%, var(--gold-glow), transparent 70%);
+      transition: opacity var(--trans); pointer-events: none;
+    }
+    .card:hover { border-color: var(--border2); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
+    .card:hover::before { opacity: 1; }
+
+    .card-image {
+      height: 175px; overflow: hidden; position: relative;
+      background: #03030e;
+      border-radius: var(--r2) var(--r2) 0 0;
+    }
+    .card-image img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      transition: transform 0.35s ease; display: block;
+    }
+    .card:hover .card-image img { transform: scale(1.04); }
+    .card-image::after {
+      content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 65px;
+      background: linear-gradient(transparent, var(--bg3));
+      pointer-events: none;
+    }
+
+    .card-body {
+      padding: 13px 15px 15px;
+      display: flex; flex-direction: column; gap: 8px; flex: 1;
+    }
+
+    .card-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      padding: 3px 9px; border-radius: 20px; font-size: 10px; font-weight: 600;
+      background: var(--gold-glow); color: var(--gold); border: 1px solid rgba(232,184,75,0.2);
+      align-self: flex-start; max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .card-name { font-size: 14px; font-weight: 700; color: var(--text); line-height: 1.4; }
+    .card-code { font-size: 11px; color: var(--text2); font-family: 'Courier New', monospace; direction: ltr; text-align: right; }
+
+    /* Color dots + variant count row */
+    .card-colors { display: flex; gap: 4px; align-items: center; flex-wrap: wrap; }
+    .color-dot {
+      width: 13px; height: 13px; border-radius: 50%;
+      border: 1.5px solid rgba(255,255,255,0.12); flex-shrink: 0;
+    }
+    .color-dot-more { font-size: 10px; color: var(--text2); }
+    .variant-count {
+      font-size: 10px; color: var(--text2); margin-right: auto;
+      background: var(--bg4); border: 1px solid var(--border);
+      padding: 1px 6px; border-radius: 8px;
+    }
+
+    .card-specs { display: flex; flex-wrap: wrap; gap: 5px; }
+    .spec-tag {
+      display: flex; align-items: center; gap: 3px; font-size: 11px; color: var(--text2);
+      background: var(--bg4); border: 1px solid var(--border); padding: 3px 7px; border-radius: 6px;
+    }
+
+    .card-divider { height: 1px; background: var(--border); margin-top: auto; }
+
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .card-price { font-size: 15px; font-weight: 700; color: var(--green); direction: ltr; }
+    .card-price-label { font-size: 10px; color: var(--text2); margin-right: 3px; }
+    .card-price-na { font-size: 12px; color: var(--text2); }
+    .card-warranty { font-size: 10px; color: var(--text2); display: flex; align-items: center; gap: 3px; }
+    .card-warranty::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+    /* Empty state */
+    .empty { grid-column: 1 / -1; text-align: center; padding: 80px 20px; color: var(--text2); }
+    .empty-icon { font-size: 48px; margin-bottom: 16px; }
+    .empty h3 { font-size: 18px; margin-bottom: 8px; color: var(--text); }
+    .empty p { font-size: 14px; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.78);
+      backdrop-filter: blur(6px); z-index: 200;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity 0.2s ease;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--bg2); border: 1px solid var(--border2); border-radius: 16px;
+      width: 100%; max-width: 640px; max-height: 92vh; overflow-y: auto;
+      scrollbar-width: thin; scrollbar-color: var(--border2) transparent;
+      transform: scale(0.96) translateY(10px); transition: transform 0.2s ease; position: relative;
+    }
+    .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+    .modal::-webkit-scrollbar { width: 4px; }
+    .modal::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 4px; }
+
+    .modal-header {
+      position: sticky; top: 0; background: var(--bg2);
+      border-bottom: 1px solid var(--border); padding: 18px 24px 14px; z-index: 1;
+    }
+    .modal-close {
+      position: absolute; top: 14px; left: 20px;
+      background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px;
+      width: 32px; height: 32px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text2); font-size: 16px; transition: all var(--trans);
+    }
+    .modal-close:hover { border-color: var(--gold); color: var(--gold); }
+    .modal-category { font-size: 11px; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 5px; }
+    .modal-title { font-size: 21px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .modal-code { font-size: 12px; color: var(--text2); direction: ltr; text-align: right; }
+
+    /* Modal catalog page image */
+    .modal-image-wrap {
+      position: relative; background: #030310; overflow: hidden;
+      max-height: 380px; border-bottom: 1px solid var(--border);
+    }
+    .modal-image-wrap img {
+      width: 100%; height: auto; max-height: 380px;
+      display: block; object-fit: cover; object-position: top center;
+    }
+    .modal-catalog-link {
+      position: absolute; bottom: 10px; left: 14px;
+      background: rgba(8,8,22,0.82); border: 1px solid var(--border2);
+      color: var(--text2); font-family: inherit; font-size: 11px;
+      padding: 4px 10px; border-radius: 6px; text-decoration: none;
+      backdrop-filter: blur(4px); transition: all var(--trans);
+    }
+    .modal-catalog-link:hover { color: var(--gold); border-color: var(--gold); }
+
+    .modal-body { padding: 20px 24px; }
+
+    /* Variant selectors */
+    .variant-selectors { margin-bottom: 18px; }
+    .variant-group { margin-bottom: 14px; }
+    .variant-label {
+      font-size: 11px; font-weight: 700; color: var(--text2);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px;
+    }
+    .variant-options { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .attr-btn {
+      padding: 6px 13px; border: 1.5px solid var(--border2); border-radius: 8px;
+      background: var(--bg3); color: var(--text); font-family: inherit; font-size: 13px;
+      cursor: pointer; transition: all var(--trans);
+    }
+    .attr-btn:hover:not(.unavail) { border-color: var(--gold); color: var(--gold); }
+    .attr-btn.selected { border-color: var(--gold); background: var(--gold-glow); color: var(--gold); font-weight: 600; }
+    .attr-btn.unavail { opacity: 0.3; cursor: not-allowed; text-decoration: line-through; }
+
+    .color-btn {
+      display: flex; align-items: center; gap: 7px; padding: 5px 11px;
+      border: 1.5px solid var(--border2); border-radius: 8px;
+      background: var(--bg3); color: var(--text); font-family: inherit; font-size: 12px;
+      cursor: pointer; transition: all var(--trans);
+    }
+    .color-btn:hover:not(.unavail) { border-color: var(--gold); }
+    .color-btn.selected { border-color: var(--gold); background: var(--gold-glow); color: var(--gold); }
+    .color-btn.unavail { opacity: 0.3; cursor: not-allowed; }
+    .color-btn-dot {
+      width: 14px; height: 14px; border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.2); flex-shrink: 0;
+      background: var(--c, #808080);
+    }
+
+    /* Price row */
+    .modal-price-row {
+      display: flex; align-items: center; gap: 16px;
+      padding: 14px 16px; background: var(--bg3); border: 1px solid var(--border);
+      border-radius: var(--r2); margin-bottom: 18px;
+    }
+    .modal-price-main { font-size: 24px; font-weight: 800; color: var(--green); direction: ltr; }
+    .modal-price-unit { font-size: 13px; font-weight: 400; color: var(--text2); margin-right: 4px; }
+    .modal-avail { font-size: 11px; color: var(--text2); margin-top: 3px; }
+    .modal-warranty-badge {
+      margin-right: auto; display: flex; align-items: center; gap: 6px;
+      font-size: 13px; color: var(--text2);
+    }
+    .modal-warranty-badge::before { content: '🛡'; font-size: 15px; }
+
+    /* Attrs table */
+    .attrs-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border); border-radius: var(--r2);
+      overflow: hidden; margin-bottom: 20px;
+    }
+    .attr-key, .attr-val { padding: 10px 13px; background: var(--bg3); font-size: 13px; }
+    .attr-key { color: var(--text2); font-weight: 500; border-left: 1px solid var(--border); }
+    .attr-val { color: var(--text); }
+    .attr-row-even .attr-key,
+    .attr-row-even .attr-val { background: var(--bg4); }
+    .attr-full { grid-column: 1 / -1; background: var(--bg3); padding: 10px 13px; font-size: 13px; color: var(--text2); }
+    .attr-full span { color: var(--text); font-weight: 400; }
+    .attr-row-even.attr-full { background: var(--bg4); }
+
+    /* Actions */
+    .modal-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 10px 18px; border-radius: var(--r); font-family: inherit;
+      font-size: 13px; font-weight: 600; cursor: pointer; border: 1px solid transparent;
+      transition: all var(--trans); text-decoration: none;
+    }
+    .btn-gold { background: linear-gradient(135deg, var(--gold), var(--gold-dim)); color: #1a1000; }
+    .btn-gold:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-outline { background: transparent; border-color: var(--border2); color: var(--text2); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-whatsapp { background: #1a4a1a; border-color: #25d366; color: #25d366; }
+    .btn-whatsapp:hover { background: #25d366; color: #000; }
+    .btn-sm { padding: 8px 13px; font-size: 12px; }
+
+    /* Toast */
+    #toast {
+      position: fixed; bottom: 24px; left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--bg4); border: 1px solid var(--gold); color: var(--gold);
+      padding: 10px 20px; border-radius: 30px; font-size: 13px; font-weight: 600;
+      z-index: 999; opacity: 0; transition: all 0.3s ease; pointer-events: none;
+    }
+    #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Active filters */
+    .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+    .active-filter-tag {
+      display: flex; align-items: center; gap: 5px;
+      padding: 4px 10px; background: var(--gold-glow); border: 1px solid rgba(232,184,75,0.3);
+      border-radius: 20px; font-size: 11px; color: var(--gold);
+    }
+    .active-filter-tag button {
+      background: none; border: none; color: var(--gold); cursor: pointer;
+      font-size: 13px; line-height: 1; padding: 0; opacity: 0.7; transition: opacity var(--trans);
+    }
+    .active-filter-tag button:hover { opacity: 1; }
+
+    /* Sidebar overlay */
+    .sidebar-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .sidebar {
+        position: fixed; right: -100%; top: 0; height: 100vh; z-index: 60;
+        border-radius: 0; transition: right 0.3s ease; padding-top: 80px;
+      }
+      .sidebar.open { right: 0; }
+      .sidebar-overlay { display: block; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+      .sidebar-overlay.open { opacity: 1; pointer-events: all; }
+      .btn-filter-toggle { display: flex; }
+      main { padding: 16px; }
+      .grid { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+      .card-image { height: 145px; }
+    }
+
+    @media (max-width: 540px) {
+      .search-wrap { max-width: none; }
+      .logo-sub { display: none; }
+      header { padding: 0 14px; gap: 12px; }
+      #productCount { display: none; }
+      .grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .card-body { padding: 10px 12px 12px; gap: 6px; }
+      .card-image { height: 130px; }
+      .attrs-grid { grid-template-columns: 1fr; }
+      .attr-key { border-left: none; }
+      .modal-price-main { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="logo" href="/">
+    <div class="logo-icon">💡</div>
+    <div>
+      <div class="logo-text">آذران نور</div>
+      <div class="logo-sub">کاتالوگ محصولات</div>
+    </div>
+  </a>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="جستجو در نام محصول، کد یا دسته‌بندی...">
+  </div>
+  <div class="header-actions">
+    <button class="btn-filter-toggle" id="filterToggle">⚙ فیلترها</button>
+    <span id="productCount"></span>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div class="filter-section">
+      <div class="filter-title">
+        دسته‌بندی
+        <button class="filter-clear" id="clearCategory" onclick="clearFilter('category')">پاک‌کردن</button>
+      </div>
+      <ul class="cat-list" id="catList"></ul>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">
+        رنگ بدنه
+        <button class="filter-clear" id="clearColor" onclick="clearFilter('color')">پاک‌کردن</button>
+      </div>
+      <div class="color-chips" id="colorChips"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">
+        رنگ نور
+        <button class="filter-clear" id="clearLightColor" onclick="clearFilter('light_color')">پاک‌کردن</button>
+      </div>
+      <div class="color-chips" id="lightColorChips"></div>
+    </div>
+
+    <div class="filter-section">
+      <div class="filter-title">
+        محدوده قیمت (تومان)
+        <button class="filter-clear" id="clearPrice" onclick="clearFilter('price')">پاک‌کردن</button>
+      </div>
+      <div class="price-inputs">
+        <input type="number" class="price-input" id="minPrice" placeholder="حداقل">
+        <span class="price-sep">—</span>
+        <input type="number" class="price-input" id="maxPrice" placeholder="حداکثر">
+      </div>
+    </div>
+
+    <button class="btn-reset-all" onclick="resetAll()">× پاک‌کردن همه فیلترها</button>
+  </aside>
+
+  <main>
+    <div class="active-filters" id="activeTags"></div>
+    <div class="results-bar">
+      <span class="results-text" id="resultsText"></span>
+      <select class="sort-select" id="sortSelect" onchange="applyFilters()">
+        <option value="default">ترتیب پیش‌فرض</option>
+        <option value="price_asc">قیمت: کم به زیاد</option>
+        <option value="price_desc">قیمت: زیاد به کم</option>
+        <option value="name_asc">نام: الف تا ی</option>
+      </select>
+    </div>
+    <div class="grid" id="productGrid"></div>
+  </main>
+</div>
+
+<!-- Product Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <button class="modal-close" onclick="closeModalDirect()">✕</button>
+      <div class="modal-category" id="mCategory"></div>
+      <div class="modal-title" id="mTitle"></div>
+      <div class="modal-code" id="mCode"></div>
+    </div>
+
+    <div class="modal-image-wrap" id="mImageWrap" style="display:none">
+      <img id="mImage" src="" alt="" loading="lazy">
+      <a class="modal-catalog-link" id="mCatalogLink" href="#" target="_blank">↗ صفحه کاتالوگ</a>
+    </div>
+
+    <div class="modal-body">
+      <div class="variant-selectors" id="mVariants"></div>
+
+      <div class="modal-price-row" id="mPriceRow" style="display:none">
+        <div>
+          <div class="modal-price-main" id="mPrice"></div>
+          <div class="modal-avail" id="mAvailability"></div>
+        </div>
+        <div class="modal-warranty-badge" id="mWarranty"></div>
+      </div>
+
+      <div class="attrs-grid" id="mAttrs"></div>
+
+      <div class="modal-actions">
+        <button class="btn btn-gold" onclick="copyProductCard()">📋 کپی اطلاعات</button>
+        <button class="btn btn-whatsapp" onclick="shareWhatsApp()">💬 واتساپ</button>
+        <button class="btn btn-outline btn-sm" onclick="copyLink()">🔗 لینک</button>
+        <button class="btn btn-outline btn-sm" onclick="closeModalDirect()">بستن</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+const GROUPS = {{ groups_json | safe }};
+const VARIANT_ATTRS = ['color', 'size', 'light_color', 'power'];
+const ATTR_LABELS = { color: 'رنگ بدنه', size: 'نوع / سایز', light_color: 'رنگ نور', power: 'توان' };
+const COLOR_MAP = {
+  'مشکی':'#252525','سفید':'#e8e8e8','طلایی':'#d4a030','نقره‌ای':'#b0b0b0',
+  'رزگلد':'#b76e79','کروم':'#9fa4a8','سیلور':'#9fa4a8','شیری':'#e8d5a0',
+  'کهربایی':'#c86010','دودی':'#606060','ذغالی':'#383838','مرمری':'#d8cfc8',
+  'بادمجانی':'#6a3870','موکا':'#6f4e37','آجری':'#8b3a2a','شامپاینی':'#c8a878',
+  'مسی':'#b87333','برنزی':'#cd7f32','آنتیک':'#9a7c50','سفید مات':'#d8d8d8',
+  'اپوکسی سفید':'#e0e0e0','اپوکسی مشکی':'#1a1a1a',
+};
+
+// ── MODAL STATE ──
+let modalGroup = null;
+let modalSel   = {};
+
+// ── FILTER STATE ──
+let state = {
+  q: '', category: '', color: '', light_color: '',
+  minPrice: '', maxPrice: '', sort: 'default', productId: null
+};
+
+// ── INIT ──
+function init() {
+  readUrlState();
+  buildFilters();
+  applyFilters();
+  bindEvents();
+  if (state.productId !== null) {
+    const g = GROUPS.find(g => g.gid === state.productId);
+    if (g) openModal(g, true);
+  }
+}
+
+function readUrlState() {
+  const p = new URLSearchParams(location.search);
+  state.q          = p.get('q')         || '';
+  state.category   = p.get('category')  || '';
+  state.color      = p.get('color')     || '';
+  state.light_color= p.get('light_color')|| '';
+  state.minPrice   = p.get('min_price') || '';
+  state.maxPrice   = p.get('max_price') || '';
+  state.sort       = p.get('sort')      || 'default';
+  const pid = p.get('product');
+  state.productId = pid !== null ? parseInt(pid) : null;
+
+  modalSel = {};
+  if (state.productId !== null) {
+    VARIANT_ATTRS.forEach(a => { const v = p.get('v_' + a); if (v) modalSel[a] = v; });
+  }
+
+  document.getElementById('searchInput').value = state.q;
+  document.getElementById('minPrice').value    = state.minPrice;
+  document.getElementById('maxPrice').value    = state.maxPrice;
+  document.getElementById('sortSelect').value  = state.sort;
+}
+
+function pushUrl() {
+  const p = new URLSearchParams();
+  if (state.q)          p.set('q',          state.q);
+  if (state.category)   p.set('category',   state.category);
+  if (state.color)      p.set('color',      state.color);
+  if (state.light_color)p.set('light_color',state.light_color);
+  if (state.minPrice)   p.set('min_price',  state.minPrice);
+  if (state.maxPrice)   p.set('max_price',  state.maxPrice);
+  if (state.sort && state.sort !== 'default') p.set('sort', state.sort);
+  if (modalGroup) {
+    p.set('product', modalGroup.gid);
+    VARIANT_ATTRS.forEach(a => { if (modalSel[a]) p.set('v_' + a, modalSel[a]); });
+  }
+  const qs = p.toString();
+  history.replaceState(null, '', qs ? '?' + qs : '/');
+}
+
+// ── FILTER BUILDERS ──
+function buildFilters() {
+  buildCategories();
+  buildAttrChips('color',       'colorChips');
+  buildAttrChips('light_color', 'lightColorChips');
+}
+
+function buildCategories() {
+  const counts = {};
+  GROUPS.forEach(g => { if (g.category) counts[g.category] = (counts[g.category] || 0) + 1; });
+  const cats = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  document.getElementById('catList').innerHTML = cats.map(([cat, n]) => `
+    <li class="cat-item ${state.category === cat ? 'active' : ''}" data-cat="${escHtml(cat)}"
+        onclick="setFilter('category', this.dataset.cat)">
+      <span class="cat-name">${escHtml(cat)}</span>
+      <span class="cat-count">${n}</span>
+    </li>`).join('');
+}
+
+function buildAttrChips(attr, id) {
+  const vals = new Set();
+  GROUPS.forEach(g => (g.attr_options[attr] || []).forEach(v => vals.add(v)));
+  const sorted = [...vals].sort();
+  const stateKey = attr;
+  const isColor = attr === 'color';
+  document.getElementById(id).innerHTML = sorted.map(v => {
+    const dot = isColor
+      ? `<span class="chip-color-dot" style="background:${COLOR_MAP[v] || '#808080'}"></span>`
+      : '';
+    return `<div class="chip ${state[stateKey] === v ? 'active' : ''}"
+                 data-attr="${escHtml(attr)}" data-val="${escHtml(v)}"
+                 onclick="setFilter(this.dataset.attr, this.dataset.val)">
+               ${dot}${escHtml(v)}
+             </div>`;
+  }).join('');
+}
+
+// ── FILTERING ──
+function applyFilters() {
+  state.sort = document.getElementById('sortSelect').value;
+
+  let results = GROUPS.filter(g => {
+    const q = state.q.toLowerCase().trim();
+    if (q) {
+      const txt = [g.name, g.code, g.category, g.model].filter(Boolean).join(' ').toLowerCase();
+      if (!txt.includes(q)) return false;
+    }
+    if (state.category && g.category !== state.category) return false;
+    if (state.color && !(g.attr_options.color || []).includes(state.color)) return false;
+    if (state.light_color && !(g.attr_options.light_color || []).includes(state.light_color)) return false;
+
+    const minP = parseFloat(state.minPrice);
+    const maxP = parseFloat(state.maxPrice);
+    if (!isNaN(minP)) {
+      if (g.price_max === null || g.price_max < minP) return false;
+    }
+    if (!isNaN(maxP)) {
+      if (g.price_min === null || g.price_min > maxP) return false;
+    }
+    return true;
+  });
+
+  if (state.sort === 'price_asc') {
+    results.sort((a, b) => {
+      if (a.price_min === null) return 1;
+      if (b.price_min === null) return -1;
+      return a.price_min - b.price_min;
+    });
+  } else if (state.sort === 'price_desc') {
+    results.sort((a, b) => {
+      if (a.price_max === null) return 1;
+      if (b.price_max === null) return -1;
+      return b.price_max - a.price_max;
+    });
+  } else if (state.sort === 'name_asc') {
+    results.sort((a, b) => (a.name || '').localeCompare(b.name || '', 'fa'));
+  }
+
+  renderGrid(results);
+  updateActiveTags();
+  updateClearButtons();
+  pushUrl();
+
+  const count = results.length;
+  document.getElementById('productCount').textContent = `${count} محصول`;
+  document.getElementById('resultsText').innerHTML = `<strong>${count}</strong> محصول یافت شد`;
+}
+
+function setFilter(key, val) {
+  state[key] = state[key] === val ? '' : val;
+  refreshFilterUI();
+  applyFilters();
+}
+
+function clearFilter(key) {
+  if (key === 'price') {
+    state.minPrice = ''; state.maxPrice = '';
+    document.getElementById('minPrice').value = '';
+    document.getElementById('maxPrice').value = '';
+  } else {
+    state[key] = '';
+  }
+  refreshFilterUI();
+  applyFilters();
+}
+
+function resetAll() {
+  state = { q: '', category: '', color: '', light_color: '', minPrice: '', maxPrice: '', sort: 'default', productId: null };
+  document.getElementById('searchInput').value = '';
+  document.getElementById('minPrice').value    = '';
+  document.getElementById('maxPrice').value    = '';
+  document.getElementById('sortSelect').value  = 'default';
+  refreshFilterUI();
+  applyFilters();
+}
+
+function refreshFilterUI() {
+  document.querySelectorAll('.cat-item').forEach(el =>
+    el.classList.toggle('active', el.dataset.cat === state.category));
+  document.querySelectorAll('#colorChips .chip').forEach(el =>
+    el.classList.toggle('active', el.dataset.val === state.color));
+  document.querySelectorAll('#lightColorChips .chip').forEach(el =>
+    el.classList.toggle('active', el.dataset.val === state.light_color));
+}
+
+function updateClearButtons() {
+  document.getElementById('clearCategory').classList.toggle('visible', !!state.category);
+  document.getElementById('clearColor').classList.toggle('visible', !!state.color);
+  document.getElementById('clearLightColor').classList.toggle('visible', !!state.light_color);
+  document.getElementById('clearPrice').classList.toggle('visible', !!(state.minPrice || state.maxPrice));
+}
+
+function updateActiveTags() {
+  const tags = [];
+  if (state.q)          tags.push({ label: `جستجو: ${state.q}`,   key: 'q' });
+  if (state.category)   tags.push({ label: state.category,          key: 'category' });
+  if (state.color)      tags.push({ label: `رنگ: ${state.color}`,  key: 'color' });
+  if (state.light_color)tags.push({ label: `نور: ${state.light_color}`, key: 'light_color' });
+  if (state.minPrice || state.maxPrice) {
+    const label = state.minPrice && state.maxPrice
+      ? `قیمت: ${Number(state.minPrice).toLocaleString()} — ${Number(state.maxPrice).toLocaleString()}`
+      : state.minPrice ? `از: ${Number(state.minPrice).toLocaleString()}` : `تا: ${Number(state.maxPrice).toLocaleString()}`;
+    tags.push({ label, key: 'price' });
+  }
+  document.getElementById('activeTags').innerHTML = tags.map(t => `
+    <div class="active-filter-tag">
+      ${escHtml(t.label)}
+      <button onclick="clearFilter('${t.key}')" title="حذف">×</button>
+    </div>`).join('');
+}
+
+// ── RENDER ──
+function renderGrid(groups) {
+  const grid = document.getElementById('productGrid');
+  if (!groups.length) {
+    grid.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">🔦</div>
+        <h3>محصولی یافت نشد</h3>
+        <p>فیلترهای انتخابی را تغییر دهید یا عبارت جستجو را اصلاح کنید.</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = groups.map(g => renderCard(g)).join('');
+}
+
+function renderCard(g) {
+  const colors  = g.attr_options.color || [];
+  const sizes   = g.attr_options.size  || [];
+  const powers  = g.attr_options.power || [];
+  const lcs     = g.attr_options.light_color || [];
+
+  const colorDots = colors.slice(0, 7).map(c =>
+    `<span class="color-dot" style="background:${COLOR_MAP[c] || '#808080'}" title="${escHtml(c)}"></span>`
+  ).join('');
+  const moreColors = colors.length > 7 ? `<span class="color-dot-more">+${colors.length - 7}</span>` : '';
+
+  const badges = [];
+  if (sizes.length  === 1) badges.push(sizes[0]);
+  if (powers.length === 1) badges.push(powers[0]);
+  if (lcs.length    === 1) badges.push(lcs[0]);
+
+  let priceHtml;
+  if (g.price_min !== null) {
+    const txt = g.price_min === g.price_max
+      ? formatPrice(g.price_min)
+      : `از ${formatPrice(g.price_min)}`;
+    priceHtml = `<div class="card-price">${txt}<span class="card-price-label">ت</span></div>`;
+  } else {
+    priceHtml = `<div class="card-price-na">قیمت استعلام</div>`;
+  }
+
+  const totalVariants = g.variants.length;
+
+  return `
+    <div class="card" data-gid="${g.gid}">
+      ${g.image_url ? `<div class="card-image"><img src="${escHtml(g.image_url)}" alt="${escHtml(g.name)}" loading="lazy"></div>` : ''}
+      <div class="card-body">
+        <div class="card-badge">${escHtml(g.category)}</div>
+        <div class="card-name">${escHtml(g.name)}</div>
+        ${g.code ? `<div class="card-code">${escHtml(g.code)}</div>` : ''}
+        ${colors.length > 0 ? `
+        <div class="card-colors">
+          ${colorDots}${moreColors}
+          ${totalVariants > 1 ? `<span class="variant-count">${totalVariants} مدل</span>` : ''}
+        </div>` : ''}
+        ${badges.length > 0 ? `<div class="card-specs">${badges.map(b => `<div class="spec-tag">${escHtml(b)}</div>`).join('')}</div>` : ''}
+        <div class="card-divider"></div>
+        <div class="card-footer">
+          ${priceHtml}
+          ${g.warranty ? `<div class="card-warranty">${escHtml(g.warranty)}</div>` : ''}
+        </div>
+      </div>
+    </div>`;
+}
+
+// ── MODAL ──
+function openModal(g, fromUrl = false) {
+  modalGroup = g;
+
+  if (!fromUrl) {
+    modalSel = {};
+    // Auto-select attrs that have exactly 1 option
+    VARIANT_ATTRS.forEach(a => {
+      const opts = g.attr_options[a] || [];
+      if (opts.length === 1) modalSel[a] = opts[0];
+    });
+  } else {
+    // Fill in missing single-option attrs
+    VARIANT_ATTRS.forEach(a => {
+      if (!modalSel[a]) {
+        const opts = g.attr_options[a] || [];
+        if (opts.length === 1) modalSel[a] = opts[0];
+      }
+    });
+  }
+
+  document.getElementById('mCategory').textContent = g.category;
+  document.getElementById('mTitle').textContent    = g.name;
+  document.getElementById('mCode').textContent     = g.code ? `کد: ${g.code}` : '';
+
+  // Image
+  if (g.image_url) {
+    document.getElementById('mImage').src         = g.image_url;
+    document.getElementById('mImage').alt         = g.name;
+    document.getElementById('mCatalogLink').href  = g.image_url;
+    document.getElementById('mImageWrap').style.display = 'block';
+  } else {
+    document.getElementById('mImageWrap').style.display = 'none';
+  }
+
+  renderVariantSelectors();
+  renderAttrs();
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  pushUrl();
+}
+
+function renderVariantSelectors() {
+  const g = modalGroup;
+  let html = '';
+  let hasSelectors = false;
+
+  VARIANT_ATTRS.forEach(attr => {
+    const opts = g.attr_options[attr] || [];
+    if (opts.length <= 1) return; // 0 = not relevant, 1 = auto-selected
+    hasSelectors = true;
+
+    const avail   = getAvailable(attr);
+    const isColor = attr === 'color';
+    const label   = ATTR_LABELS[attr];
+
+    html += `<div class="variant-group"><div class="variant-label">${escHtml(label)}</div><div class="variant-options">`;
+
+    opts.forEach(val => {
+      const isSel   = modalSel[attr] === val;
+      const isAvail = avail.includes(val);
+      const cls     = `${isSel ? 'selected' : ''} ${!isAvail ? 'unavail' : ''}`;
+
+      if (isColor) {
+        const hex = COLOR_MAP[val] || '#808080';
+        html += `<button class="color-btn ${cls}" data-attr="${escHtml(attr)}" data-val="${escHtml(val)}">
+                   <span class="color-btn-dot" style="--c:${hex}"></span>${escHtml(val)}
+                 </button>`;
+      } else {
+        html += `<button class="attr-btn ${cls}" data-attr="${escHtml(attr)}" data-val="${escHtml(val)}">${escHtml(val)}</button>`;
+      }
+    });
+
+    html += `</div></div>`;
+  });
+
+  document.getElementById('mVariants').innerHTML = html;
+  document.getElementById('mVariants').style.display = hasSelectors ? 'block' : 'none';
+
+  updatePrice();
+}
+
+function getAvailable(targetAttr) {
+  const g   = modalGroup;
+  const opts = g.attr_options[targetAttr] || [];
+  return opts.filter(val =>
+    g.variants.some(v => {
+      if (v[targetAttr] !== val) return false;
+      return VARIANT_ATTRS.every(a => {
+        if (a === targetAttr) return true;
+        if (!modalSel[a]) return true;
+        return v[a] === modalSel[a];
+      });
+    })
+  );
+}
+
+function selectAttr(attr, val) {
+  if (modalSel[attr] === val) {
+    modalSel[attr] = '';
+  } else {
+    modalSel[attr] = val;
+    fixConflicts(attr);
+  }
+  renderVariantSelectors();
+  pushUrl();
+}
+
+function fixConflicts(changedAttr) {
+  VARIANT_ATTRS.forEach(a => {
+    if (a === changedAttr || !modalSel[a]) return;
+    if (!getAvailable(a).includes(modalSel[a])) modalSel[a] = '';
+  });
+}
+
+function findVariant() {
+  const g = modalGroup;
+  const matches = g.variants.filter(v =>
+    VARIANT_ATTRS.every(a => !modalSel[a] || v[a] === modalSel[a])
+  );
+  return matches.length === 1 ? matches[0] : null;
+}
+
+function getPriceRange() {
+  const g = modalGroup;
+  const matches = g.variants.filter(v =>
+    VARIANT_ATTRS.every(a => !modalSel[a] || v[a] === modalSel[a])
+  );
+  const prices = matches.map(v => v.price).filter(p => p !== null);
+  if (!prices.length) return null;
+  return { min: Math.min(...prices), max: Math.max(...prices) };
+}
+
+function updatePrice() {
+  const g = modalGroup;
+  const variant   = findVariant();
+  const priceRow  = document.getElementById('mPriceRow');
+  const mPrice    = document.getElementById('mPrice');
+  const mAvail    = document.getElementById('mAvailability');
+  const mWarranty = document.getElementById('mWarranty');
+
+  if (variant && variant.price) {
+    mPrice.innerHTML  = `${formatPrice(variant.price)}<span class="modal-price-unit">تومان</span>`;
+    mAvail.textContent = variant.availability || '';
+    priceRow.style.display = 'flex';
+  } else {
+    const range = getPriceRange();
+    if (range) {
+      const txt = range.min === range.max
+        ? formatPrice(range.min)
+        : `${formatPrice(range.min)} — ${formatPrice(range.max)}`;
+      mPrice.innerHTML  = `${txt}<span class="modal-price-unit">تومان</span>`;
+      mAvail.textContent = variant ? '' : 'مشخصات را انتخاب کنید';
+      priceRow.style.display = 'flex';
+    } else {
+      priceRow.style.display = 'none';
+    }
+  }
+
+  mWarranty.textContent = g.warranty ? `گارانتی ${g.warranty}` : '';
+}
+
+function renderAttrs() {
+  const g = modalGroup;
+  const rows = [
+    ['کد / مدل',             g.code],
+    ['ردیف / مدل',           g.model],
+    ['ابعاد',                g.dimensions],
+    ['شار نوری',             g.lumen],
+    ['جنس / چیپ / درایور',  g.material],
+    ['IP / CRI',             g.cri],
+    ['تاریخ لیست',           g.date],
+    ['کاتالوگ',              g.catalog],
+  ].filter(([, v]) => v);
+
+  // Auto-selected single-option variant attrs
+  VARIANT_ATTRS.forEach(a => {
+    const opts = g.attr_options[a] || [];
+    if (opts.length === 1) rows.push([ATTR_LABELS[a], opts[0]]);
+  });
+
+  const longRows = [];
+  if (g.features) longRows.push(['ویژگی‌ها', g.features]);
+  if (g.notes)    longRows.push(['توضیحات',   g.notes]);
+
+  let html = '';
+  rows.forEach(([k, v], i) => {
+    const cls = i % 2 === 1 ? 'attr-row-even' : '';
+    html += `<div class="attr-key ${cls}">${escHtml(k)}</div><div class="attr-val ${cls}">${escHtml(v)}</div>`;
+  });
+  longRows.forEach(([k, v], i) => {
+    const cls = (rows.length + i) % 2 === 1 ? 'attr-row-even attr-full' : 'attr-full';
+    html += `<div class="${cls}">${escHtml(k)}: <span>${escHtml(v)}</span></div>`;
+  });
+
+  document.getElementById('mAttrs').innerHTML = html;
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  modalGroup = null;
+  modalSel   = {};
+  pushUrl();
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+
+// ── SHARE / COPY ──
+function buildProductCard(boldMarkdown = false) {
+  const g = modalGroup;
+  if (!g) return '';
+  const variant = findVariant();
+  const b = s => boldMarkdown ? `*${s}*` : s;
+  const lines = [];
+
+  // Header
+  lines.push(`💡 ${b(g.name)}`);
+  lines.push(`آذران نور${g.category ? ' • ' + g.category : ''}`);
+  lines.push('');
+
+  // Variant attributes
+  const icons = { color: '🎨', size: '📐', light_color: '🌡', power: '⚡' };
+  const variantLines = [];
+  VARIANT_ATTRS.forEach(attr => {
+    const opts = g.attr_options[attr] || [];
+    if (opts.length === 0) return;
+    let val;
+    if (variant)          val = variant[attr];
+    else if (modalSel[attr]) val = modalSel[attr];
+    else if (opts.length === 1) val = opts[0];
+    else                  val = opts.join(' / ');  // list all options
+    if (val) variantLines.push(`${icons[attr]} ${ATTR_LABELS[attr]}: ${val}`);
+  });
+  if (variantLines.length) { variantLines.forEach(l => lines.push(l)); lines.push(''); }
+
+  // Price & warranty
+  if (variant && variant.price) {
+    lines.push(`💰 ${b('قیمت')}: ${formatPrice(variant.price)} تومان`);
+    if (variant.availability) lines.push(`✅ ${variant.availability}`);
+  } else {
+    const range = getPriceRange();
+    if (range) {
+      const priceTxt = range.min === range.max
+        ? `${formatPrice(range.min)} تومان`
+        : `از ${formatPrice(range.min)} تا ${formatPrice(range.max)} تومان`;
+      lines.push(`💰 ${b('قیمت')}: ${priceTxt}`);
+    }
+  }
+  if (g.warranty) lines.push(`🛡 گارانتی: ${g.warranty}`);
+  lines.push('');
+
+  // Technical specs
+  const specs = [];
+  if (g.code)       specs.push(`🔖 کد: ${g.code}`);
+  if (g.dimensions) specs.push(`📏 ابعاد: ${g.dimensions}`);
+  if (g.lumen)      specs.push(`🔦 شار نوری: ${g.lumen}`);
+  if (g.material)   specs.push(`🔩 جنس / چیپ: ${g.material}`);
+  if (g.cri)        specs.push(`🎯 CRI / IP: ${g.cri}`);
+  if (specs.length) { specs.forEach(s => lines.push(s)); lines.push(''); }
+
+  if (g.features) { lines.push(`✨ ${g.features}`); lines.push(''); }
+
+  // Link
+  lines.push(`🔗 ${location.href}`);
+
+  return lines.join('\n').trim();
+}
+
+function copyProductCard() {
+  const text = buildProductCard(false);
+  if (!text) return;
+  navigator.clipboard.writeText(text)
+    .then(() => showToast('اطلاعات محصول کپی شد ✓'))
+    .catch(() => { fallbackCopy(text); showToast('اطلاعات محصول کپی شد ✓'); });
+}
+
+function copyLink() {
+  const url = location.href;
+  navigator.clipboard.writeText(url)
+    .then(() => showToast('لینک کپی شد ✓'))
+    .catch(() => { fallbackCopy(url); showToast('لینک کپی شد ✓'); });
+}
+
+function shareWhatsApp() {
+  const text = buildProductCard(true);
+  if (!text) return;
+  window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; document.body.appendChild(ta); ta.select();
+  document.execCommand('copy'); document.body.removeChild(ta);
+}
+
+// ── UTILS ──
+function formatPrice(n) { return n.toLocaleString('en-US'); }
+
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── EVENTS ──
+function bindEvents() {
+  let searchTimer;
+  document.getElementById('searchInput').addEventListener('input', e => {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(() => { state.q = e.target.value; applyFilters(); }, 280);
+  });
+
+  ['minPrice', 'maxPrice'].forEach(id => {
+    let timer;
+    document.getElementById(id).addEventListener('input', e => {
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        state[id === 'minPrice' ? 'minPrice' : 'maxPrice'] = e.target.value;
+        applyFilters();
+      }, 400);
+    });
+  });
+
+  // Grid card click
+  document.getElementById('productGrid').addEventListener('click', e => {
+    const card = e.target.closest('.card[data-gid]');
+    if (!card) return;
+    const g = GROUPS.find(g => g.gid == card.dataset.gid);
+    if (g) openModal(g);
+  });
+
+  // Variant button click (event delegation)
+  document.getElementById('mVariants').addEventListener('click', e => {
+    const btn = e.target.closest('[data-attr][data-val]');
+    if (btn) selectAttr(btn.dataset.attr, btn.dataset.val);
+  });
+
+  document.getElementById('filterToggle').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebarOverlay').classList.toggle('open');
+  });
+  document.getElementById('sidebarOverlay').addEventListener('click', () => {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+  });
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+  window.addEventListener('popstate', () => {
+    readUrlState();
+    refreshFilterUI();
+    applyFilters();
+  });
+}
+
+init();
+</script>
+</body>
+</html>
